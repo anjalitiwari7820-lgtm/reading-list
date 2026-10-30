@@ -7,12 +7,18 @@ use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
-    public function index()
-    {
-        $books = Book::all();
+    public function index(Request $request)
+{
+    $query = Book::query();
 
-        return view('books.index', compact('books'));
+    if ($request->has('status') && $request->status !== 'all') {
+        $query->where('status', $request->status);
     }
+
+    $books = $query->get();
+
+    return view('books.index', compact('books'));
+}
     public function create()
 {
     return view('books.create');
